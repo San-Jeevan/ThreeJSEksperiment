@@ -225,14 +225,12 @@
 			}
 
 			function render() {
-                if (!initShow) {
+               
                     var timer = Date.now() * 0.001;
                     camera.position.x = Math.cos(timer) * 400;
                     camera.position.z = Math.sin(timer) * 400;
-                }
-                setTimeout(function () {
-                    initShow = true;
-                }, 4500);
+               
+    
 			  
 			
 				camera.lookAt( scene.position );
