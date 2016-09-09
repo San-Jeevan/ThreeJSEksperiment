@@ -1,0 +1,21 @@
+{
+  "name": "TSboks",
+  "homepage": "https://github.com/San-Jeevan/HHTSESKE",
+  "authors": [
+    "Jeevan Sivagnanasuntharam <jeevan@Inmeta.no>"
+  ],
+  "description": "boks eksperimentering",
+  "main": "bower",
+  "keywords": [
+    "ingen"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
