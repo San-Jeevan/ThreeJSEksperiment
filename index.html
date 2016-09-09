@@ -32,6 +32,7 @@
 
 			var container, stats;
 			var camera, scene, renderer;
+			var initShow = false;
 
 
 			var mouse3D,
@@ -135,7 +136,9 @@
 				document.addEventListener('mousemove', onDocumentMouseMove, false);
 				document.addEventListener('mousedown', onDocumentMouseDown, false);
 				document.addEventListener('mouseup', onDocumentMouseUp, false);
-				//window.addEventListener( 'resize', onWindowResize, false );
+			    //window.addEventListener( 'resize', onWindowResize, false );
+
+			
 
 			}
 
@@ -223,11 +226,16 @@
 			}
 
 			function render() {
-
-				var timer = Date.now() * 0.0001;
-
-				//camera.position.x = Math.cos( timer ) * 200;
-				//camera.position.z = Math.sin( timer ) * 200;
+                if (!initShow) {
+                    var timer = Date.now() * 0.001;
+                    camera.position.x = Math.cos(timer) * 400;
+                    camera.position.z = Math.sin(timer) * 400;
+                }
+                setTimeout(function () {
+                    initShow = true;
+                }, 3000);
+			  
+			
 				camera.lookAt( scene.position );
 				renderer.render( scene, camera );
 
