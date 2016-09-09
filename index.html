@@ -63,7 +63,7 @@
 				var hoyde = 100;
 			    var dybde = 200;
 
-				var ubreddeAntall = 10;
+				var ubreddeAntall = 8;
 				var uhoydeAntall = 10;
 				var udybdeAntall = 10;
 
@@ -81,15 +81,14 @@
 			    //    }
 
 			    //}
-			    var geometrysmall = new THREE.BoxGeometry(ubredde, uhoyde, udybde);
-			    var materialsmall = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5, wireframe: false });
+			    var geometrysmall = new THREE.BoxGeometry(ubredde * ubreddeAntall, uhoyde * uhoydeAntall, udybde * udybdeAntall);
+			    var materialsmall = new THREE.MeshBasicMaterial({  color: 0x007F00, transparent: true, opacity: 0.5, overdraw: false, wireframe: false });
 			    cubesmall = new THREE.Mesh(geometrysmall, materialsmall);
-			    cubesmall.position.x = 0 - (bredde / 2) + (ubredde / 2);
-			    cubesmall.position.y = 0 - (hoyde / 2) + (uhoyde / 2);
-			    cubesmall.position.z = 0 - (dybde / 2) + (udybde / 2);
-			    mycube = new THREE.BoxHelper(cubesmall);
-			    mycube.material.color.set(0xff0000);
-			    scene.add(mycube);
+			    cubesmall.position.x = 0 - (bredde / 2) + ((ubredde * ubreddeAntall) / 2);
+			    cubesmall.position.y = 0 - (hoyde / 2) + ((uhoyde * uhoydeAntall) / 2);
+			    cubesmall.position.z = 0 - (dybde / 2) + ((udybde * udybdeAntall) / 2);
+			    scene.add(cubesmall);
+			    
 
 				var geometryc = new THREE.BoxGeometry(bredde, hoyde, dybde);
 				var materialc = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5, wireframe: false });
