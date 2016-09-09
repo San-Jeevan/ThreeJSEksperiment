@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>three.js canvas - geometry - cube</title>
+    <title>Eksperimentering</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
@@ -27,6 +27,40 @@
 <body>
   
     <div class="container"><img class="img-responsive" src="images/skisse.png"></div>
+<div id="canvasContainer" class="container">
+    <div class="col-md-4">
+        NB: FELTENE ER IKKE FERDIG
+        <form>
+            <div class="form-group">
+                <label for="pallebredde">Pallebredde (mm)</label>
+                <input type="email" class="form-control" id="pallebredde" placeholder="100" value="100">
+            </div>
+            <div class="form-group">
+                <label for="pallehøyde">Pallehøyde (mm)</label>
+                <input type="email" class="form-control" id="pallehøyde" placeholder="100" value="100">
+            </div>
+            <div class="form-group">
+                <label for="palledybde">Palledybde (mm)</label>
+                <input type="email" class="form-control" id="palledybde" placeholder="100" value="100">
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label for="palledybde">Palledybde (mm)</label>
+                <input type="email" class="form-control" id="pakning" placeholder="100" value="100">
+            </div>
+            <div class="form-group">
+                <label for="palledybde">Palledybde (mm)</label>
+                <input type="email" class="form-control" id="palledybde" placeholder="100" value="100">
+            </div>
+            <div class="form-group">
+                <label for="palledybde">Palledybde (mm)</label>
+                <input type="email" class="form-control" id="palledybde" placeholder="100" value="100">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+
+</div>
     
     <script>
 
@@ -43,16 +77,20 @@
 			    onMouseDownTheta = 45,
 			    phi = 60,
 			    onMouseDownPhi = 60;
+			var canvasWidth = 500;
+			var canvasHeight = 500;
 
 			init();
 			animate();
 
 			function init() {
+			 
+
 			    onMouseDownPosition = new THREE.Vector2();
 				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+				document.getElementById('canvasContainer').appendChild(container);
 
-				camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, - 500, 1000 );
+				camera = new THREE.OrthographicCamera( canvasWidth / - 2, canvasWidth / 2, canvasHeight / 2, canvasHeight / - 2, - 500, 1000 );
 				camera.position.x = 200;
 				camera.position.y = 100;
 				camera.position.z = 200;
@@ -63,8 +101,8 @@
 				var hoyde = 100;
 			    var dybde = 200;
 
-				var ubreddeAntall = 8;
-				var uhoydeAntall = 10;
+				var ubreddeAntall = 10;
+				var uhoydeAntall = 20;
 				var udybdeAntall = 10;
 
 				var ubredde = 10;
@@ -100,31 +138,10 @@
 				mycube.material.color.set(0x000);
 				scene.add(mycube);
 
-	
-
-				// Lights
-
-				var ambientLight = new THREE.AmbientLight( Math.random() * 0x10 );
-				scene.add( ambientLight );
-
-				var directionalLight = new THREE.DirectionalLight( Math.random() * 0xffffff );
-				directionalLight.position.x = Math.random() - 0.5;
-				directionalLight.position.y = Math.random() - 0.5;
-				directionalLight.position.z = Math.random() - 0.5;
-				directionalLight.position.normalize();
-				scene.add( directionalLight );
-
-				var directionalLight = new THREE.DirectionalLight( Math.random() * 0xffffff );
-				directionalLight.position.x = Math.random() - 0.5;
-				directionalLight.position.y = Math.random() - 0.5;
-				directionalLight.position.z = Math.random() - 0.5;
-				directionalLight.position.normalize();
-				scene.add( directionalLight );
-
 				renderer = new THREE.CanvasRenderer();
 				renderer.setClearColor( 0xffffff );
 				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize(canvasWidth, canvasHeight);
 				container.appendChild( renderer.domElement );
 
 				stats = new Stats();
@@ -200,14 +217,14 @@
 
 			function onWindowResize() {
 
-				camera.left = window.innerWidth / - 2;
-				camera.right = window.innerWidth / 2;
-				camera.top = window.innerHeight / 2;
-				camera.bottom = window.innerHeight / - 2;
+				camera.left = canvasWidth / - 2;
+				camera.right = canvasWidth / 2;
+				camera.top = canvasHeight / 2;
+				camera.bottom = canvasHeight / - 2;
 
 				camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( canvasWidth, canvasHeight );
 
 			}
 
