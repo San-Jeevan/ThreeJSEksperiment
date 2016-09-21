@@ -30,8 +30,6 @@
 <div id="canvasContainer" class="container">
     <div class="row">
         <div class="col-md-4">
-
-            <div>
                 <div class="col-xs-4">
                     <label for="pallehoyde">Pallehøyde</label>
                     <input class="form-control" value="100" id="pallehoyde" type="text">
@@ -44,7 +42,6 @@
                     <label for="palledybde">Palledybde</label>
                     <input class="form-control" value="200" id="palledybde" type="text">
                 </div>
-            </div>
         </div>
       
         <div class="col-md-8">
@@ -82,7 +79,7 @@
           
         </div>
     </div>
-    <div class="row">  NB: FELTENE ER IKKE FERDIG</div>
+    /*<div class="row">  NB: FELTENE ER IKKE FERDIG</div>*/
 
 
     </div>
@@ -92,7 +89,6 @@
 			var container, stats;
 			var camera, scene, renderer;
 			var initShow = false;
-
 
 			var mouse3D,
 			    isMouseDown = false,
@@ -105,12 +101,55 @@
 			var canvasWidth = 500;
 			var canvasHeight = 500;
 
+			var bredde = 100;
+			var hoyde = 100;
+			var dybde = 200;
+
+			var ubreddeAntall = 10;
+			var uhoydeAntall = 20;
+			var udybdeAntall = 10;
+
+			var ubredde = 10;
+			var uhoyde = 10;
+			var udybde = 10;
+
+			var geometrysmall;
+
 			init();
 			animate();
 
-			function init() {
-			 
 
+			function redrawBoxes() {
+			    for (var i = 0; i <= scene.children.length; i++) {
+			        scene.remove(scene.children[0]);
+			    }
+
+			    addBoxes();
+			}
+
+
+        function addBoxes() {
+            geometrysmall = new THREE.BoxGeometry(ubredde * ubreddeAntall, uhoyde * uhoydeAntall, udybde * udybdeAntall);
+            var materialsmall = new THREE.MeshBasicMaterial({ color: 0x007F00, transparent: true, opacity: 0.5, overdraw: false, wireframe: false });
+            cubesmall = new THREE.Mesh(geometrysmall, materialsmall);
+            cubesmall.position.x = 0 - (bredde / 2) + ((ubredde * ubreddeAntall) / 2);
+            cubesmall.position.y = 0 - (hoyde / 2) + ((uhoyde * uhoydeAntall) / 2);
+            cubesmall.position.z = 0 - (dybde / 2) + ((udybde * udybdeAntall) / 2);
+            scene.add(cubesmall);
+
+
+            var geometryc = new THREE.BoxGeometry(bredde, hoyde, dybde);
+            var materialc = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5, wireframe: false });
+            cubec = new THREE.Mesh(geometryc, materialc);
+            cubec.position.y = 0;
+            cubec.position.x = 0;
+            cubec.position.z = 0;
+            mycube = new THREE.BoxHelper(cubec);
+            mycube.material.color.set(0x000);
+            scene.add(mycube);
+        }
+
+			function init() {
 			    onMouseDownPosition = new THREE.Vector2();
 				container = document.createElement( 'div' );
 				document.getElementById('canvasContainer').appendChild(container);
@@ -122,37 +161,7 @@
 
 				scene = new THREE.Scene();
 
-				var bredde = 100;
-				var hoyde = 100;
-			    var dybde = 200;
-
-				var ubreddeAntall = 10;
-				var uhoydeAntall = 20;
-				var udybdeAntall = 10;
-
-				var ubredde = 10;
-				var uhoyde = 10;
-			    var udybde = 10;
-
-
-			    var geometrysmall = new THREE.BoxGeometry(ubredde * ubreddeAntall, uhoyde * uhoydeAntall, udybde * udybdeAntall);
-			    var materialsmall = new THREE.MeshBasicMaterial({  color: 0x007F00, transparent: true, opacity: 0.5, overdraw: false, wireframe: false });
-			    cubesmall = new THREE.Mesh(geometrysmall, materialsmall);
-			    cubesmall.position.x = 0 - (bredde / 2) + ((ubredde * ubreddeAntall) / 2);
-			    cubesmall.position.y = 0 - (hoyde / 2) + ((uhoyde * uhoydeAntall) / 2);
-			    cubesmall.position.z = 0 - (dybde / 2) + ((udybde * udybdeAntall) / 2);
-			    scene.add(cubesmall);
-			    
-
-				var geometryc = new THREE.BoxGeometry(bredde, hoyde, dybde);
-				var materialc = new THREE.MeshBasicMaterial({ vertexColors: THREE.FaceColors, overdraw: 0.5, wireframe: false });
-				cubec = new THREE.Mesh(geometryc, materialc);
-				cubec.position.y = 0;
-				cubec.position.x = 0;
-				cubec.position.z = 0;
-				mycube = new THREE.BoxHelper(cubec);
-				mycube.material.color.set(0x000);
-				scene.add(mycube);
+			    addBoxes();
 
 				renderer = new THREE.CanvasRenderer();
 				renderer.setClearColor( 0xffffff );
@@ -162,114 +171,135 @@
 
 				stats = new Stats();
 				container.appendChild( stats.dom );
-
-				//
 				container.addEventListener('mousemove', onDocumentMouseMove, false);
 				container.addEventListener('mousedown', onDocumentMouseDown, false);
 				container.addEventListener('mouseup', onDocumentMouseUp, false);
-			    //window.addEventListener( 'resize', onWindowResize, false );
-
-			
-
 			}
 
 
 			function onDocumentMouseDown(event) {
-
 			    event.preventDefault();
-
 			    isMouseDown = true;
-
 			    onMouseDownTheta = theta;
 			    onMouseDownPhi = phi;
 			    onMouseDownPosition.x = event.clientX;
 			    onMouseDownPosition.y = event.clientY;
-
 			}
 
 			function onDocumentMouseMove(event) {
-
 			    event.preventDefault();
-
 			    if (isMouseDown) {
-
 			        theta = -((event.clientX - onMouseDownPosition.x) * 0.5) + onMouseDownTheta;
 			        phi = ((event.clientY - onMouseDownPosition.y) * 0.5) + onMouseDownPhi;
-
 			        phi = Math.min(180, Math.max(0, phi));
-
 			        camera.position.x = radious * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
 			        camera.position.y = radious * Math.sin(phi * Math.PI / 360);
 			        camera.position.z = radious * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
 			        camera.updateMatrix();
-
 			    }
 
-
 			    render();
-
 			}
 
 			function onDocumentMouseUp(event) {
-
 			    event.preventDefault();
-
 			    isMouseDown = false;
-
 			    onMouseDownPosition.x = event.clientX - onMouseDownPosition.x;
 			    onMouseDownPosition.y = event.clientY - onMouseDownPosition.y;
-
 			    if (onMouseDownPosition.length() > 5) {
-
 			        return;
-
 			    }
-
-
 			    render();
-
 			}
 
 
 			function onWindowResize() {
-
 				camera.left = canvasWidth / - 2;
 				camera.right = canvasWidth / 2;
 				camera.top = canvasHeight / 2;
 				camera.bottom = canvasHeight / - 2;
-
 				camera.updateProjectionMatrix();
-
 				renderer.setSize( canvasWidth, canvasHeight );
-
 			}
 
-			//
 
 			function animate() {
-
 				requestAnimationFrame( animate );
-
 				stats.begin();
 				render();
 				stats.end();
-
 			}
 
 			function render() {
-               
-                    var timer = Date.now() * 0.001;
-                    camera.position.x = Math.cos(timer) * 400;
-                    camera.position.z = Math.sin(timer) * 400;
-               
-    
-			  
-			
-				camera.lookAt( scene.position );
-				renderer.render( scene, camera );
-
+			    var timer = Date.now() * 0.001;
+			    camera.position.x = Math.cos(timer) * 400;
+			    camera.position.z = Math.sin(timer) * 400;
+			    camera.lookAt(scene.position);
+			    renderer.render(scene, camera);
 			}
 
+
+			$(document).ready(function () {
+			    $("input[type='text']").keyup(function (event) {
+			        console.log(event.target.id);
+			        var sender = event.target.id;
+			        var value = event.target.value;
+			        switch(sender) {
+			            case "pallehoyde":
+			                hoyde = value;
+			                redrawBoxes();
+			                break;
+			            case "palledybde":
+			                dybde = value;
+			                redrawBoxes();
+			                break;
+			            case "pallebredde":
+			                bredde = value;
+			                redrawBoxes();
+			                break;
+
+			            case "pakninghoyde":
+			                uhoyde = value;
+			                redrawBoxes();
+			                break;
+
+
+			            case "pakningdybde":
+			                udybde = value;
+			                redrawBoxes();
+			                break;
+
+
+			            case "pakningbredde":
+			                ubredde = value;
+			                redrawBoxes();
+			                break;
+
+
+			            case "antallbredde":
+			                ubreddeAntall = value;
+			                redrawBoxes();
+			                break;
+
+
+			            case "antallhoyde":
+			                uhoydeAntall = value;
+			                redrawBoxes();
+			                break;
+
+
+			            case "antalldybde":
+			                udybdeAntall = value;
+			                redrawBoxes();
+			                break;
+
+			            default:
+			            break;
+			        }
+			    });
+			});
+
+		
     </script>
 
 
