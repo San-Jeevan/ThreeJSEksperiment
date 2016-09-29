@@ -49,27 +49,27 @@
                 <div class="panel-body" style="background: rgb(0,127,0);background: rgba(0,127,0,0.5);">
                     <div class="col-xs-3">
                         <label for="pakninghoyde">Pakninghøyde</label>
-                        <input class="form-control" value="10" id="pakninghoyde" type="text">
+                        <input class="form-control" value="20" id="pakninghoyde" type="text">
                     </div>
                     <div class="col-xs-3">
                         <label for="pakningbredde">Pakningbredde</label>
-                        <input class="form-control" value="10" id="pakningbredde" type="text">
+                        <input class="form-control" value="30" id="pakningbredde" type="text">
                     </div>
                     <div class="col-xs-3">
                         <label for="pakningdybde">Pakningdybde</label>
-                        <input class="form-control" value="10" id="pakningdybde" type="text">
+                        <input class="form-control" value="60" id="pakningdybde" type="text">
                     </div>
                     <div class="col-xs-3 ">
                         <label for="antallbredde">AntallIBredde</label>
-                        <input class="form-control" value="10" id="antallbredde" type="text">
+                        <input class="form-control" value="4" id="antallbredde" type="text">
                     </div>
                     <div class="col-xs-3">
                         <label for="antallhoyde">AntallIhoyde</label>
-                        <input class="form-control" value="20" id="antallhoyde" type="text">
+                        <input class="form-control" value="3" id="antallhoyde" type="text">
                     </div>
                     <div class="col-xs-3">
                         <label for="antalldybde">AntallIdybde</label>
-                        <input class="form-control" value="10" id="antalldybde" type="text">
+                        <input class="form-control" value="3" id="antalldybde" type="text">
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
     
     <script>
 			var container, stats;
-			var camera, scene, renderer,scene2;
+			var camera, scene, renderer,scene2,scene3,scene4;
 			var initShow = false;
 
 			var mouse3D,
@@ -97,13 +97,13 @@
 			var hoyde = 100;
 			var dybde = 200;
 
-			var ubreddeAntall = 10;
-			var uhoydeAntall = 20;
-			var udybdeAntall = 10;
+			var ubreddeAntall = 4;
+			var uhoydeAntall = 3;
+			var udybdeAntall = 3;
 
-			var ubredde = 10;
-			var uhoyde = 10;
-			var udybde = 10;
+			var ubredde = 20;
+			var uhoyde = 30;
+			var udybde = 55;
 
 			var boxcolor;
 			var boxopacity;
@@ -118,9 +118,26 @@
 			    for (var i = 0; i <= scene.children.length; i++) {
 			        scene.remove(scene.children[0]);
 			    }
+
+			    var totalength = scene3.children.length;
+			    for (var j = 0; j <= totalength; j++) {
+			        scene2.remove(scene2.children[0]);
+			    }
+
+			    totalength = scene3.children.length;
+			    for (var k = 0; k <= totalength; k++) {
+			        scene3.remove(scene3.children[0]);
+			    }
+
+			    totalength = scene4.children.length;
+			    for (var k = 0; k <= totalength; k++) {
+			        scene4.remove(scene4.children[0]);
+			    }
+			  
 			    calculateColor();
 			    addBoxes();
-			    
+			    addPalle();
+
 			}
 
 			function calculateColor() {
@@ -142,7 +159,7 @@
 			    var plankehoyde = 4;
 			    var plankebredde = bredde / 6;
 			    var klossbredde = plankebredde;
-			    var klossdybde = 25;
+			    var klossdybde = dybde/8;
 			    var klosshoyde = 16;
 
 			   var geometrysmall = new THREE.BoxGeometry(plankebredde, plankehoyde, dybde);
@@ -160,14 +177,35 @@
 			        scene2.add(cubesmall);
 			    }
 
+			    var materialsmallred = new THREE.MeshBasicMaterial({
+			        vertexColor: THREE.FaceColors,
+			        color: '#000000'
+			    });
+	
+
+                ////mellomplanke
+			    for (var i = 0; i < 3; i++) {
+			        var multiplicator = i;
+			        if (i == 2) multiplicator = -1;
+			        var geometrysmall2 = new THREE.BoxGeometry(bredde, plankehoyde, klossdybde);
+			        var cubesmall = new THREE.Mesh(geometrysmall2, materialsmall);
+			        cubesmall.position.x = 0;
+			        cubesmall.position.y = 0 - (plankehoyde / 2) - (hoyde / 2)
+			        cubesmall.position.z = (0 - dybde / 2 + (klossdybde / 2)) * multiplicator
+			        scene2.add(cubesmall);
+			    }
+
 			    var klossgeometery = new THREE.BoxGeometry(klossbredde, klosshoyde, klossdybde);
+			    var materialKLOSS = new THREE.MeshBasicMaterial({
+			        color: "#FFE0B2", transparent: false, overdraw: false, wireframe: false
+			    });
 			    for (var i = 0; i < 3; i++) {
 			        var xmultiplicator = i;
 			        if (i == 2) xmultiplicator = -1;
 			        for (var j = 0; j < 3; j++) {
 			            var zmultiplicator = j;
 			            if (j == 2) zmultiplicator = -1;
-			            var klossmall = new THREE.Mesh(klossgeometery, materialsmall);
+			            var klossmall = new THREE.Mesh(klossgeometery, materialKLOSS);
 			            klossmall.position.x = (0 + (klossbredde / 2) - (bredde / 2)) * xmultiplicator;
 			            klossmall.position.y = 0 - (klosshoyde / 2) - plankehoyde - (hoyde / 2)
 			            klossmall.position.z = (0 - (dybde / 2) + (klossdybde / 2)) * zmultiplicator;
@@ -184,22 +222,32 @@
 			        cubesmall.position.z = 0;
 			        scene2.add(cubesmall);
 			    }
-			}
 
+			    //underlag
+			    var underlaggeometery = new THREE.BoxGeometry(bredde, 0.1, dybde);
+			    var materialc = new THREE.MeshBasicMaterial({ color: "#FFFFFF" });
+			    cubec = new THREE.Mesh(underlaggeometery, materialc);
+			    cubec.position.y = 0 - hoyde/2;
+			    cubec.position.x = 0;
+			    cubec.position.z = 0;
+			 
+			    scene4.add(cubec);
+
+			}
 
             function addBoxes() {
             geometrysmall = new THREE.BoxGeometry(ubredde * ubreddeAntall, uhoyde * uhoydeAntall, udybde * udybdeAntall);
             var materialsmall = new THREE.MeshBasicMaterial({
-                color: boxcolor, transparent: false, opacity: 0.3, overdraw: false, wireframe: false
+                color: boxcolor, transparent: false, overdraw: false, wireframe: false
             });
             cubesmall = new THREE.Mesh(geometrysmall, materialsmall);
             cubesmall.position.x = 0 - (bredde / 2) + ((ubredde * ubreddeAntall) / 2);
             cubesmall.position.y = 0 - (hoyde / 2) + ((uhoyde * uhoydeAntall) / 2);
             cubesmall.position.z = 0 - (dybde / 2) + ((udybde * udybdeAntall) / 2);
-            scene.add(cubesmall);
+            //scene.add(cubesmall);
 
-            var geometryc = new THREE.BoxGeometry(bredde, hoyde, dybde);
-            var materialc = new THREE.MeshLambertMaterial({ color: boxcolor, overdraw: false, wireframe: true });
+            var geometryc = new THREE.CubeGeometry(bredde, hoyde, dybde);
+            var materialc = new THREE.MeshLambertMaterial({ transparent: false, color: "0x00ff00", overdraw: false, wireframe: false });
             cubec = new THREE.Mesh(geometryc, materialc);
             cubec.position.y = 0;
             cubec.position.x = 0;
@@ -207,6 +255,30 @@
             mycube = new THREE.EdgesHelper(cubec);
             mycube.material.color.set(0x00000);
             scene.add(mycube);
+            var materialsmallboxes = new THREE.MeshBasicMaterial({ transparent: false, color: boxcolor, wireframe: true, wireframeLinewidth: 0.1 });
+            var materialsmallboxesclean = new THREE.MeshBasicMaterial({ transparent: false, color: boxcolor, wireframe: false, wireframeLinewidth: 0.1 });
+            for (var x = 0; x < ubreddeAntall; x++) {
+                for (var y = 0; y < uhoydeAntall; y++) {
+                    for (var z = 0; z < udybdeAntall; z++) {
+                        var geometryc = new THREE.CubeGeometry(ubredde, uhoyde, udybde);
+                        cubec = new THREE.Mesh(geometryc, materialsmallboxes);
+                        cubec.position.x = 0 - (bredde / 2) + (ubredde / 2) + (ubredde * x);
+                        cubec.position.y = 0 - (hoyde / 2) + (uhoyde / 2) + (uhoyde * y);
+                        cubec.position.z = 0 - (dybde / 2) + (udybde / 2) + (udybde * z) 
+                        mycube = new THREE.BoxHelper(cubec);
+                        mycube.material.color.set(0x00000);
+                        scene3.add(mycube);
+
+                        cubec = new THREE.Mesh(geometryc, materialsmallboxesclean);
+                        cubec.position.x = 0 - (bredde / 2) + (ubredde / 2) + (ubredde * x);
+                        cubec.position.y = 0 - (hoyde / 2) + (uhoyde / 2) + (uhoyde * y);
+                        cubec.position.z = 0 - (dybde / 2) + (udybde / 2) + (udybde * z)
+                        scene3.add(cubec);
+                    }
+                }
+            }
+
+ 
         }
 
 			function init() {
@@ -221,8 +293,10 @@
 
 				scene = new THREE.Scene();
 				scene2 = new THREE.Scene();
+				scene3 = new THREE.Scene();
+				scene4 = new THREE.Scene();
 				calculateColor();
-				
+			
 			    addBoxes();
 			    addPalle();
 
@@ -300,9 +374,14 @@
 			    camera.lookAt(scene.position);
 
 			    renderer.clear();
-			    renderer.render(scene2, camera);
+			    renderer.render(scene2, camera); //palle
 			    renderer.clearDepth();
-			    renderer.render(scene, camera);
+			    renderer.render(scene4, camera); //underlag
+			    renderer.clearDepth();
+			    renderer.render(scene3, camera); //småbokser
+			   
+			    renderer.clearDepth();
+			    renderer.render(scene, camera); //storboks
 			}
 
 			$(document).ready(function () {
